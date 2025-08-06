@@ -95,6 +95,10 @@
   animation: slideInRight 1s ease-out;
 }
 
+.hero-image img {
+  border-radius: 15px;
+}
+
 .placeholder-image {
   width: 400px;
   height: 300px;

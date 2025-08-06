@@ -10,7 +10,7 @@
 
 /* About Hero Section */
 .about-hero {
-  background: var(--gradient-secondary);
+  background: var(--gradient-primary);
   color: white;
   padding: 4rem 0;
   text-align: center;
@@ -58,6 +58,10 @@
 .story-image {
   display: flex;
   justify-content: center;
+}
+
+.story-image img {
+  border-radius: 15px;
 }
 
 .placeholder-image {

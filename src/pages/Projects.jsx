@@ -1,63 +1,83 @@
 import { useState } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 import './Projects.css';
 
 const Projects = () => {
   const [filter, setFilter] = useState('all');
+  const { t } = useLanguage();
 
   const projects = [
     {
       id: 1,
-      title: "E-Commerce Platform",
-      description: "A modern, responsive e-commerce website built with React and Node.js featuring payment integration and inventory management.",
-      category: "web",
-      technologies: ["React", "Node.js", "MongoDB", "Stripe"],
-      image: "🛒",
+      title: "Jakarta Business Center",
+      titleId: "Jakarta Business Center",
+      description: "Modern 25-story commercial building with state-of-the-art facilities and sustainable design features.",
+      descriptionId: "Gedung komersial modern 25 lantai dengan fasilitas canggih dan fitur desain berkelanjutan.",
+      category: "commercial",
+      location: "Jakarta, Indonesia",
+      duration: "24 months",
+      image: "🏢",
       status: "completed"
     },
     {
       id: 2,
-      title: "Mobile Banking App",
-      description: "Secure mobile banking application with biometric authentication and real-time transaction monitoring.",
-      category: "mobile",
-      technologies: ["React Native", "Firebase", "Redux"],
-      image: "📱",
+      title: "Green Valley Residences",
+      titleId: "Green Valley Residences",
+      description: "Luxury residential complex with 150 units featuring modern amenities and green building standards.",
+      descriptionId: "Kompleks residensial mewah dengan 150 unit yang menampilkan fasilitas modern dan standar bangunan hijau.",
+      category: "residential",
+      location: "Surabaya, Indonesia",
+      duration: "18 months",
+      image: "🏠",
       status: "completed"
     },
     {
       id: 3,
-      title: "Cloud Analytics Dashboard",
-      description: "Real-time analytics dashboard for monitoring business metrics with interactive charts and data visualization.",
-      category: "web",
-      technologies: ["Vue.js", "D3.js", "AWS", "PostgreSQL"],
-      image: "📊",
+      title: "Trans-Java Highway Bridge",
+      titleId: "Jembatan Tol Trans-Jawa",
+      description: "Major infrastructure project connecting two provinces with a 2.5km cable-stayed bridge.",
+      descriptionId: "Proyek infrastruktur besar yang menghubungkan dua provinsi dengan jembatan cable-stayed sepanjang 2,5km.",
+      category: "infrastructure",
+      location: "Central Java, Indonesia",
+      duration: "36 months",
+      image: "🌉",
       status: "completed"
     },
     {
       id: 4,
-      title: "IoT Device Management",
-      description: "Comprehensive platform for managing and monitoring IoT devices with automated alerts and reporting.",
-      category: "web",
-      technologies: ["Angular", "Python", "Docker", "MQTT"],
-      image: "🔧",
+      title: "Bali Resort & Spa",
+      titleId: "Bali Resort & Spa",
+      description: "Luxury resort renovation with traditional Balinese architecture and modern hospitality facilities.",
+      descriptionId: "Renovasi resort mewah dengan arsitektur tradisional Bali dan fasilitas perhotelan modern.",
+      category: "renovation",
+      location: "Bali, Indonesia",
+      duration: "12 months",
+      image: "🏖️",
       status: "in-progress"
     },
     {
       id: 5,
-      title: "Social Media App",
-      description: "Cross-platform social media application with real-time messaging and content sharing features.",
-      category: "mobile",
-      technologies: ["Flutter", "Dart", "GraphQL"],
-      image: "💬",
+      title: "Bandung Tech Hub",
+      titleId: "Bandung Tech Hub",
+      description: "Innovation center and startup incubator with flexible office spaces and collaboration areas.",
+      descriptionId: "Pusat inovasi dan inkubator startup dengan ruang kantor fleksibel dan area kolaborasi.",
+      category: "commercial",
+      location: "Bandung, Indonesia",
+      duration: "15 months",
+      image: "�",
       status: "in-progress"
     },
     {
       id: 6,
-      title: "AI-Powered CRM",
-      description: "Customer relationship management system enhanced with machine learning for predictive analytics.",
-      category: "web",
-      technologies: ["Python", "TensorFlow", "Django", "React"],
-      image: "🤖",
-      status: "planning"
+      title: "Medan Shopping Mall",
+      titleId: "Medan Shopping Mall", 
+      description: "Large-scale retail and entertainment complex with modern architecture and sustainable energy systems.",
+      descriptionId: "Kompleks ritel dan hiburan skala besar dengan arsitektur modern dan sistem energi berkelanjutan.",
+      category: "commercial",
+      location: "Medan, Indonesia",
+      duration: "30 months",
+      image: "🛍️",
+      status: "planned"
     }
   ];
 
@@ -67,20 +87,22 @@ const Projects = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'completed': return '#27ae60';
+      case 'completed': return '#83bc40';
       case 'in-progress': return '#f39c12';
-      case 'planning': return '#3498db';
-      default: return '#95a5a6';
+      case 'planned': return '#262561';
+      default: return '#b7b7b7';
     }
   };
+
+  const { language } = useLanguage();
 
   return (
     <div className="projects">
       {/* Hero Section */}
       <section className="projects-hero">
         <div className="container">
-          <h1>Our Projects</h1>
-          <p>Explore our portfolio of innovative solutions and successful client projects.</p>
+          <h1>{t('projectsTitle')}</h1>
+          <p>{t('projectsSubtitle')}</p>
         </div>
       </section>
 
@@ -92,19 +114,31 @@ const Projects = () => {
               className={filter === 'all' ? 'active' : ''} 
               onClick={() => setFilter('all')}
             >
-              All Projects
+              {t('allProjects')}
             </button>
             <button 
-              className={filter === 'web' ? 'active' : ''} 
-              onClick={() => setFilter('web')}
+              className={filter === 'residential' ? 'active' : ''} 
+              onClick={() => setFilter('residential')}
             >
-              Web Development
+              {t('residential')}
             </button>
             <button 
-              className={filter === 'mobile' ? 'active' : ''} 
-              onClick={() => setFilter('mobile')}
+              className={filter === 'commercial' ? 'active' : ''} 
+              onClick={() => setFilter('commercial')}
             >
-              Mobile Apps
+              {t('commercial')}
+            </button>
+            <button 
+              className={filter === 'infrastructure' ? 'active' : ''} 
+              onClick={() => setFilter('infrastructure')}
+            >
+              {t('infrastructure')}
+            </button>
+            <button 
+              className={filter === 'renovation' ? 'active' : ''} 
+              onClick={() => setFilter('renovation')}
+            >
+              {t('renovation')}
             </button>
           </div>
         </div>
@@ -122,20 +156,19 @@ const Projects = () => {
                     className="project-status" 
                     style={{ backgroundColor: getStatusColor(project.status) }}
                   >
-                    {project.status.replace('-', ' ')}
+                    {t(project.status.replace('-', ''))}
                   </div>
                 </div>
                 <div className="project-content">
-                  <h3>{project.title}</h3>
-                  <p>{project.description}</p>
-                  <div className="project-technologies">
-                    {project.technologies.map((tech, index) => (
-                      <span key={index} className="tech-tag">{tech}</span>
-                    ))}
+                  <h3>{language === 'id' ? project.titleId : project.title}</h3>
+                  <p>{language === 'id' ? project.descriptionId : project.description}</p>
+                  <div className="project-details">
+                    <div className="project-location">📍 {project.location}</div>
+                    <div className="project-duration">⏱️ {project.duration}</div>
                   </div>
                   <div className="project-actions">
-                    <button className="btn btn-primary">View Details</button>
-                    <button className="btn btn-secondary">Live Demo</button>
+                    <button className="btn btn-primary">{t('viewDetails')}</button>
+                    <button className="btn btn-secondary">{t('getQuote')}</button>
                   </div>
                 </div>
               </div>

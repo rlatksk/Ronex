@@ -1,30 +1,34 @@
+import { useLanguage } from '../contexts/LanguageContext';
 import './Footer.css';
 
 const Footer = () => {
+  const { t } = useLanguage();
+
   return (
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-content">
           <div className="footer-section">
-            <h3>Ronex</h3>
-            <p>Building innovative solutions for tomorrow's challenges.</p>
+            <h3>Ronex Construction</h3>
+            <p>{t('heroSubtitle')}</p>
           </div>
           <div className="footer-section">
             <h4>Quick Links</h4>
             <ul>
-              <li><a href="/">Home</a></li>
-              <li><a href="/about">About Us</a></li>
-              <li><a href="/projects">Projects</a></li>
+              <li><a href="/">{t('home')}</a></li>
+              <li><a href="/about">{t('about')}</a></li>
+              <li><a href="/projects">{t('projects')}</a></li>
             </ul>
           </div>
           <div className="footer-section">
-            <h4>Contact</h4>
-            <p>Email: info@ronex.com</p>
-            <p>Phone: (555) 123-4567</p>
+            <h4>{t('contactUs')}</h4>
+            <p>Email: info@ronex.co.id</p>
+            <p>Phone: +62 21 123-4567</p>
+            <p>Jakarta, Indonesia</p>
           </div>
         </div>
         <div className="footer-bottom">
-          <p>&copy; 2025 Ronex. All rights reserved.</p>
+          <p>&copy; 2025 Ronex Construction. {t('allRightsReserved')}</p>
         </div>
       </div>
     </footer>
