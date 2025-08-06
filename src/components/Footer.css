@@ -1,7 +1,8 @@
 .footer {
-  background-color: #2c3e50;
-  color: white;
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
   margin-top: auto;
+  border-top: 1px solid var(--border-color);
 }
 
 .footer-container {
@@ -18,19 +19,19 @@
 }
 
 .footer-section h3 {
-  color: #3498db;
+  color: var(--accent-primary);
   margin-bottom: 1rem;
   font-size: 1.5rem;
 }
 
 .footer-section h4 {
-  color: #ecf0f1;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   font-size: 1.2rem;
 }
 
 .footer-section p {
-  color: #bdc3c7;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 0.5rem;
 }
@@ -45,23 +46,23 @@
 }
 
 .footer-section ul li a {
-  color: #bdc3c7;
+  color: var(--text-secondary);
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .footer-section ul li a:hover {
-  color: #3498db;
+  color: var(--accent-primary);
 }
 
 .footer-bottom {
-  border-top: 1px solid #34495e;
+  border-top: 1px solid var(--border-color);
   padding-top: 1rem;
   text-align: center;
 }
 
 .footer-bottom p {
-  color: #95a5a6;
+  color: var(--text-muted);
   margin: 0;
 }
 

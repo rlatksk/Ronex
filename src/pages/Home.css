@@ -10,7 +10,7 @@
 
 /* Hero Section */
 .hero {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-primary);
   color: white;
   padding: 4rem 0;
   min-height: 70vh;
@@ -66,14 +66,14 @@
 }
 
 .btn-primary {
-  background-color: #3498db;
+  background-color: var(--accent-primary);
   color: white;
 }
 
 .btn-primary:hover {
-  background-color: #2980b9;
+  background-color: var(--accent-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+  box-shadow: 0 4px 15px var(--shadow-medium);
 }
 
 .btn-secondary {
@@ -84,7 +84,7 @@
 
 .btn-secondary:hover {
   background-color: white;
-  color: #667eea;
+  color: var(--accent-primary);
   transform: translateY(-2px);
 }
 
@@ -111,14 +111,14 @@
 /* Services Section */
 .services {
   padding: 4rem 0;
-  background-color: #f8f9fa;
+  background-color: var(--bg-secondary);
 }
 
 .section-title {
   text-align: center;
   font-size: 2.5rem;
   margin-bottom: 3rem;
-  color: #2c3e50;
+  color: var(--text-primary);
 }
 
 .services-grid {
@@ -128,17 +128,18 @@
 }
 
 .service-card {
-  background: white;
+  background: var(--card-bg);
   padding: 2rem;
   border-radius: 15px;
   text-align: center;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 15px var(--shadow-light);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid var(--border-color);
 }
 
 .service-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 25px var(--shadow-medium);
 }
 
 .service-icon {
@@ -147,20 +148,20 @@
 }
 
 .service-card h3 {
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   font-size: 1.5rem;
 }
 
 .service-card p {
-  color: #7f8c8d;
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
 /* CTA Section */
 .cta {
-  background-color: #2c3e50;
-  color: white;
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
   padding: 4rem 0;
   text-align: center;
 }
@@ -174,6 +175,16 @@
   font-size: 1.2rem;
   margin-bottom: 2rem;
   opacity: 0.9;
+  color: var(--text-secondary);
+}
+
+.cta .btn-primary {
+  background-color: var(--accent-primary);
+  color: white;
+}
+
+.cta .btn-primary:hover {
+  background-color: var(--accent-hover);
 }
 
 /* Animations */
