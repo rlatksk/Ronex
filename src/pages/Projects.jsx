@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import './Projects.css';
 
@@ -208,7 +209,7 @@ const Projects = () => {
           <div className="cta-content">
             <h2>Have a Project in Mind?</h2>
             <p>Let's discuss how we can help bring your ideas to life.</p>
-            <a href="/about" className="btn btn-primary">Start a Project</a>
+            <Link to="/about" className="btn btn-primary">Start a Project</Link>
           </div>
         </div>
       </section>

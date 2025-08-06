@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import './Home.css';
 
@@ -15,8 +16,8 @@ const Home = () => {
               {t('heroSubtitle')}
             </p>
             <div className="hero-buttons">
-              <a href="/projects" className="btn btn-primary">{t('ourProjects')}</a>
-              <a href="/about" className="btn btn-secondary">{t('learnMore')}</a>
+              <Link to="/projects" className="btn btn-primary">{t('ourProjects')}</Link>
+              <Link to="/about" className="btn btn-secondary">{t('learnMore')}</Link>
             </div>
           </div>
           <div className="hero-image">
@@ -60,7 +61,7 @@ const Home = () => {
           <div className="cta-content">
             <h2>Ready to Start Your Project?</h2>
             <p>Let's work together to bring your ideas to life.</p>
-            <a href="/about" className="btn btn-primary">Get In Touch</a>
+            <Link to="/about" className="btn btn-primary">Get In Touch</Link>
           </div>
         </div>
       </section>

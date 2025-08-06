@@ -104,7 +104,7 @@ export const LanguageProvider = ({ children }) => {
       
       // About
       aboutTitle: 'Tentang Ronex Construction',
-      aboutSubtitle: 'Membangun Keunggulan Sejak 2008',
+      aboutSubtitle: 'Membangun Keunggulan Sejak 2022',
       aboutDescription: 'Ronex Construction telah menjadi nama terpercaya di industri konstruksi Indonesia selama lebih dari 15 tahun. Kami mengkhususkan diri dalam memberikan proyek konstruksi berkualitas tinggi tepat waktu dan sesuai anggaran.',
       ourValues: 'Nilai-Nilai Kami',
       quality: 'Kualitas',

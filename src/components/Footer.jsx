@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import './Footer.css';
 
@@ -15,9 +16,9 @@ const Footer = () => {
           <div className="footer-section">
             <h4>Quick Links</h4>
             <ul>
-              <li><a href="/">{t('home')}</a></li>
-              <li><a href="/about">{t('about')}</a></li>
-              <li><a href="/projects">{t('projects')}</a></li>
+              <li><Link to="/">{t('home')}</Link></li>
+              <li><Link to="/about">{t('about')}</Link></li>
+              <li><Link to="/projects">{t('projects')}</Link></li>
             </ul>
           </div>
           <div className="footer-section">
