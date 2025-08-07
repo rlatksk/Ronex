@@ -7,17 +7,18 @@ const LanguageToggle = () => {
 
   // Map language codes to country codes and text
   const displayConfig = {
-    en: { code: 'US', name: 'English' },
-    id: { code: 'ID', name: 'Indonesia' },
+    id: { code: 'US', name: 'English' },
+    en: { code: 'ID', name: 'Indonesia' },
   };
 
-  const nextLanguage = language === 'en' ? 'Bahasa Indonesia' : 'English';
+  const nextLanguage = language === 'en' ? 'English' : 'Bahasa Indonesia';
 
   return (
     <button
       className="language-toggle"
       onClick={toggleLanguage}
       aria-label={`Switch to ${nextLanguage}`}
+      title={`Switch to ${nextLanguage}`}
     >
       {/* Flag Icon from Library */}
       <ReactCountryFlag
@@ -26,15 +27,9 @@ const LanguageToggle = () => {
         style={{
           width: '1.5em',
           height: '1.5em',
-          marginRight: '8px', // Adds space between flag and text
         }}
         aria-hidden="true"
       />
-
-      {/* Language Name */}
-      <span className="language-name">
-        {displayConfig[language].name}
-      </span>
     </button>
   );
 };

@@ -1,85 +1,14 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
+import { projectsData, getProjectStats } from '../data/projectsData';
 import './Projects.css';
 
 const Projects = () => {
   const [filter, setFilter] = useState('all');
   const { t } = useLanguage();
 
-  const projects = [
-    {
-      id: 1,
-      title: "Jakarta Business Center",
-      titleId: "Jakarta Business Center",
-      description: "Modern 25-story commercial building with state-of-the-art facilities and sustainable design features.",
-      descriptionId: "Gedung komersial modern 25 lantai dengan fasilitas canggih dan fitur desain berkelanjutan.",
-      category: "commercial",
-      location: "Jakarta, Indonesia",
-      duration: "24 months",
-      image: "🏢",
-      status: "completed"
-    },
-    {
-      id: 2,
-      title: "Green Valley Residences",
-      titleId: "Green Valley Residences",
-      description: "Luxury residential complex with 150 units featuring modern amenities and green building standards.",
-      descriptionId: "Kompleks residensial mewah dengan 150 unit yang menampilkan fasilitas modern dan standar bangunan hijau.",
-      category: "residential",
-      location: "Surabaya, Indonesia",
-      duration: "18 months",
-      image: "🏠",
-      status: "completed"
-    },
-    {
-      id: 3,
-      title: "Trans-Java Highway Bridge",
-      titleId: "Jembatan Tol Trans-Jawa",
-      description: "Major infrastructure project connecting two provinces with a 2.5km cable-stayed bridge.",
-      descriptionId: "Proyek infrastruktur besar yang menghubungkan dua provinsi dengan jembatan cable-stayed sepanjang 2,5km.",
-      category: "infrastructure",
-      location: "Central Java, Indonesia",
-      duration: "36 months",
-      image: "🌉",
-      status: "completed"
-    },
-    {
-      id: 4,
-      title: "Bali Resort & Spa",
-      titleId: "Bali Resort & Spa",
-      description: "Luxury resort renovation with traditional Balinese architecture and modern hospitality facilities.",
-      descriptionId: "Renovasi resort mewah dengan arsitektur tradisional Bali dan fasilitas perhotelan modern.",
-      category: "renovation",
-      location: "Bali, Indonesia",
-      duration: "12 months",
-      image: "🏖️",
-      status: "in-progress"
-    },
-    {
-      id: 5,
-      title: "Bandung Tech Hub",
-      titleId: "Bandung Tech Hub",
-      description: "Innovation center and startup incubator with flexible office spaces and collaboration areas.",
-      descriptionId: "Pusat inovasi dan inkubator startup dengan ruang kantor fleksibel dan area kolaborasi.",
-      category: "commercial",
-      location: "Bandung, Indonesia",
-      duration: "15 months",
-      image: "�",
-      status: "in-progress"
-    },
-    {
-      id: 6,
-      title: "Medan Shopping Mall",
-      titleId: "Medan Shopping Mall", 
-      description: "Large-scale retail and entertainment complex with modern architecture and sustainable energy systems.",
-      descriptionId: "Kompleks ritel dan hiburan skala besar dengan arsitektur modern dan sistem energi berkelanjutan.",
-      category: "commercial",
-      location: "Medan, Indonesia",
-      duration: "30 months",
-      image: "🛍️",
-      status: "planned"
-    }
-  ];
+  const projects = projectsData;
 
   const filteredProjects = filter === 'all' 
     ? projects 
@@ -96,6 +25,16 @@ const Projects = () => {
 
   const { language } = useLanguage();
 
+  // Calculate dynamic statistics using the shared utility function
+  const {
+    completedProjects,
+    inProgressProjects,
+    totalProjects,
+    uniqueLocations,
+    categories,
+    totalDurationMonths
+  } = getProjectStats(projects);
+
   return (
     <div className="projects">
       {/* Hero Section */}
@@ -106,44 +45,6 @@ const Projects = () => {
         </div>
       </section>
 
-      {/* Filter Section */}
-      <section className="projects-filter">
-        <div className="container">
-          <div className="filter-buttons">
-            <button 
-              className={filter === 'all' ? 'active' : ''} 
-              onClick={() => setFilter('all')}
-            >
-              {t('allProjects')}
-            </button>
-            <button 
-              className={filter === 'residential' ? 'active' : ''} 
-              onClick={() => setFilter('residential')}
-            >
-              {t('residential')}
-            </button>
-            <button 
-              className={filter === 'commercial' ? 'active' : ''} 
-              onClick={() => setFilter('commercial')}
-            >
-              {t('commercial')}
-            </button>
-            <button 
-              className={filter === 'infrastructure' ? 'active' : ''} 
-              onClick={() => setFilter('infrastructure')}
-            >
-              {t('infrastructure')}
-            </button>
-            <button 
-              className={filter === 'renovation' ? 'active' : ''} 
-              onClick={() => setFilter('renovation')}
-            >
-              {t('renovation')}
-            </button>
-          </div>
-        </div>
-      </section>
-
       {/* Projects Grid */}
       <section className="projects-grid-section">
         <div className="container">
@@ -151,7 +52,7 @@ const Projects = () => {
             {filteredProjects.map(project => (
               <div key={project.id} className="project-card">
                 <div className="project-image">
-                  <span className="project-emoji">{project.image}</span>
+                  <img src={project.image} alt={project.title} className="project-img" />
                   <div 
                     className="project-status" 
                     style={{ backgroundColor: getStatusColor(project.status) }}
@@ -180,23 +81,23 @@ const Projects = () => {
       {/* Stats Section */}
       <section className="project-stats">
         <div className="container">
-          <h2>Project Statistics</h2>
+          <h2>{language === 'id' ? 'Statistik Proyek' : 'Project Statistics'}</h2>
           <div className="stats-grid">
             <div className="stat-item">
-              <div className="stat-number">50+</div>
-              <div className="stat-label">Projects Completed</div>
+              <div className="stat-number">{completedProjects}</div>
+              <div className="stat-label">{language === 'id' ? 'Proyek Selesai' : 'Projects Completed'}</div>
             </div>
             <div className="stat-item">
-              <div className="stat-number">25+</div>
-              <div className="stat-label">Happy Clients</div>
+              <div className="stat-number">{uniqueLocations}</div>
+              <div className="stat-label">{language === 'id' ? 'Lokasi Berbeda' : 'Different Locations'}</div>
             </div>
             <div className="stat-item">
-              <div className="stat-number">3</div>
-              <div className="stat-label">Years Experience</div>
+              <div className="stat-number">{totalDurationMonths}</div>
+              <div className="stat-label">{language === 'id' ? 'Total Bulan Pengerjaan' : 'Total Months of Work'}</div>
             </div>
             <div className="stat-item">
-              <div className="stat-number">15+</div>
-              <div className="stat-label">Technologies</div>
+              <div className="stat-number">{categories}</div>
+              <div className="stat-label">{language === 'id' ? 'Kategori Proyek' : 'Project Categories'}</div>
             </div>
           </div>
         </div>
@@ -208,7 +109,7 @@ const Projects = () => {
           <div className="cta-content">
             <h2>Have a Project in Mind?</h2>
             <p>Let's discuss how we can help bring your ideas to life.</p>
-            <a href="/about" className="btn btn-primary">Start a Project</a>
+            <Link to="/about" className="btn btn-primary">Start a Project</Link>
           </div>
         </div>
       </section>

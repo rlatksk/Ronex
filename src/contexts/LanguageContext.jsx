@@ -33,7 +33,7 @@ export const LanguageProvider = ({ children }) => {
       
       // Home Page
       heroTitle: 'Building Tomorrow\'s Infrastructure Today',
-      heroSubtitle: 'Professional construction services with over 15 years of experience. From residential buildings to commercial complexes, we deliver quality construction solutions.',
+      heroSubtitle: 'Professional construction services. From residential buildings to commercial complexes, we deliver quality construction solutions.',
       ourProjects: 'Our Projects',
       learnMore: 'Learn More',
       ourServices: 'Our Services',
@@ -49,9 +49,9 @@ export const LanguageProvider = ({ children }) => {
       infrastructureDesc: 'Roads, bridges, and public infrastructure built to last for generations.',
       
       // About
-      aboutTitle: 'About Ronex Construction',
+      aboutTitle: 'About Ronex Muda Berkarya',
       aboutSubtitle: 'Building Excellence Since 2022',
-      aboutDescription: 'Ronex Construction has been a trusted name in the Indonesian construction industry for over 15 years. We specialize in delivering high-quality construction projects on time and within budget.',
+      aboutDescription: 'Ronex Muda Berkarya has been a trusted name in the Indonesian construction. We specialize in delivering high-quality construction projects on time and within budget.',
       ourValues: 'Our Values',
       quality: 'Quality',
       qualityDesc: 'We never compromise on quality and use only the finest materials.',
@@ -103,9 +103,9 @@ export const LanguageProvider = ({ children }) => {
       infrastructureDesc: 'Jalan, jembatan, dan infrastruktur publik yang dibangun untuk bertahan generasi.',
       
       // About
-      aboutTitle: 'Tentang Ronex Construction',
-      aboutSubtitle: 'Membangun Keunggulan Sejak 2008',
-      aboutDescription: 'Ronex Construction telah menjadi nama terpercaya di industri konstruksi Indonesia selama lebih dari 15 tahun. Kami mengkhususkan diri dalam memberikan proyek konstruksi berkualitas tinggi tepat waktu dan sesuai anggaran.',
+      aboutTitle: 'Tentang Ronex Muda Berkarya',
+      aboutSubtitle: 'Membangun Keunggulan Sejak 2022',
+      aboutDescription: 'Ronex Muda Berkarya telah menjadi nama terpercaya di industri konstruksi Indonesia. Kami mengkhususkan diri dalam memberikan proyek konstruksi berkualitas tinggi tepat waktu dan sesuai anggaran.',
       ourValues: 'Nilai-Nilai Kami',
       quality: 'Kualitas',
       qualityDesc: 'Kami tidak pernah berkompromi pada kualitas dan hanya menggunakan material terbaik.',

@@ -22,13 +22,10 @@ const Footer = () => {
           </div>
           <div className="footer-section">
             <h4>{t('contactUs')}</h4>
-            <p>Email: info@ronex.co.id</p>
-            <p>Phone: +62 21 123-4567</p>
-            <p>Jakarta, Indonesia</p>
+            <p>Email: ronexmudaberkarya@gmail.com</p>
+            <p>Phone: +62 812 1000 3060</p>
+            <p>Mangga Besar Raya No. 93 DD RT 015/RW 001, Taman Sari, Tangki, Jakarta 11170, Indonesia</p>
           </div>
-        </div>
-        <div className="footer-bottom">
-          <p>&copy; 2025 Ronex Construction. {t('allRightsReserved')}</p>
         </div>
       </div>
     </footer>

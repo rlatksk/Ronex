@@ -1,8 +1,12 @@
 import { useLanguage } from '../contexts/LanguageContext';
+import { projectsData, getProjectStats } from '../data/projectsData';
 import './About.css';
 
 const About = () => {
   const { t } = useLanguage();
+
+  // Get dynamic project statistics
+  const { completedProjects } = getProjectStats(projectsData);
 
   return (
     <div className="about">
@@ -63,20 +67,20 @@ const About = () => {
         <div className="container">
           <div className="stats-grid">
             <div className="stat-item">
-              <div className="stat-number">500+</div>
-              <div className="stat-label">Projects Completed</div>
+              <div className="stat-number">{completedProjects}</div>
+              <div className="stat-label">{'Projects Completed'}</div>
             </div>
             <div className="stat-item">
               <div className="stat-number">15+</div>
-              <div className="stat-label">Years Experience</div>
+              <div className="stat-label">{'Years Experience'}</div>
             </div>
             <div className="stat-item">
               <div className="stat-number">200+</div>
-              <div className="stat-label">Happy Clients</div>
+              <div className="stat-label">{'Happy Clients'}</div>
             </div>
             <div className="stat-item">
               <div className="stat-number">50+</div>
-              <div className="stat-label">Expert Workers</div>
+              <div className="stat-label">{'Expert Workers'}</div>
             </div>
           </div>
         </div>
