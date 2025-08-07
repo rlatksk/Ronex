@@ -1,6 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
-import ThemeToggle from './ThemeToggle';
 import LanguageToggle from './LanguageToggle';
 import { useLanguage } from '../contexts/LanguageContext';
 import './Navbar.css';
@@ -54,13 +53,11 @@ const Navbar = () => {
             </li>
           </ul>
           <LanguageToggle />
-          <ThemeToggle />
         </div>
 
         {/* Mobile Navigation */}
         <div className="mobile-nav">
           <LanguageToggle />
-          <ThemeToggle />
           <button 
             className={`hamburger ${isMenuOpen ? 'active' : ''}`}
             onClick={toggleMenu}

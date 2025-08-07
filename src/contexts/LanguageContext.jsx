@@ -78,6 +78,11 @@ export const LanguageProvider = ({ children }) => {
       // Common
       viewDetails: 'View Details',
       getQuote: 'Get Quote',
+      
+      // CTA
+      ctaTitle: 'Ready to Start Your Project?',
+      ctaDescription: 'Let\'s work together to bring your ideas to life.',
+      getInTouch: 'Get In Touch',
     },
     id: {
       // Navigation
@@ -132,6 +137,11 @@ export const LanguageProvider = ({ children }) => {
       // Common
       viewDetails: 'Lihat Detail',
       getQuote: 'Dapatkan Penawaran',
+      
+      // CTA
+      ctaTitle: 'Siap Memulai Proyek Anda?',
+      ctaDescription: 'Mari bekerja sama untuk mewujudkan ide-ide Anda.',
+      getInTouch: 'Hubungi Kami',
     }
   };
 

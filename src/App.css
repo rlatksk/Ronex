@@ -5,34 +5,8 @@
   box-sizing: border-box;
 }
 
-/* Theme Variables */
-.light-theme {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary: #f1f5f9;
-  --text-primary: #262561;
-  --text-secondary: #4a4a7a;
-  --text-muted: #94a3b8;
-  --accent-primary: #83bc40;
-  --accent-secondary: #9dd654;
-  --accent-hover: #6ea032;
-  --accent-light: rgba(131, 188, 64, 0.1);
-  --border-color: #e2e8f0;
-  --shadow-light: rgba(38, 37, 97, 0.04);
-  --shadow-medium: rgba(38, 37, 97, 0.08);
-  --shadow-dark: rgba(38, 37, 97, 0.12);
-  --shadow-colored: rgba(131, 188, 64, 0.2);
-  --gradient-primary: linear-gradient(135deg, #262561 0%, #1e1e54 25%, #83bc40 100%);
-  --gradient-secondary: linear-gradient(135deg, #83bc40 0%, #9dd654 50%, #b8e96d 100%);
-  --gradient-card: linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,0.8) 100%);
-  --gradient-hero: linear-gradient(135deg, #262561 0%, #1a1a4d 25%, #2d2d6b 50%, #83bc40 100%);
-  --card-bg: rgba(255, 255, 255, 0.9);
-  --card-border: rgba(131, 188, 64, 0.1);
-  --hero-overlay: rgba(38, 37, 97, 0.05);
-  --glass-bg: rgba(255, 255, 255, 0.25);
-  --glass-border: rgba(255, 255, 255, 0.2);
-}
-
+/* Dark Theme Variables (Default and Only Theme) */
+:root,
 .dark-theme {
   --bg-primary: #0f0f23;
   --bg-secondary: #1a1a2e;

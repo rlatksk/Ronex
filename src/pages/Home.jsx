@@ -59,9 +59,9 @@ const Home = () => {
       <section className="cta">
         <div className="container">
           <div className="cta-content">
-            <h2>Ready to Start Your Project?</h2>
-            <p>Let's work together to bring your ideas to life.</p>
-            <Link to="/about" className="btn btn-primary">Get In Touch</Link>
+            <h2>{t('ctaTitle') || 'Ready to Start Your Project?'}</h2>
+            <p>{t('ctaDescription') || 'Let\'s work together to bring your ideas to life.'}</p>
+            <Link to="/about" className="btn btn-primary">{t('getInTouch') || 'Get In Touch'}</Link>
           </div>
         </div>
       </section>
