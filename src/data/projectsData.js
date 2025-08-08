@@ -1,76 +1,56 @@
-export const projectsData = [
-  {
-    id: 1,
-    title: "Luxury House in Puri Kembangan",
-    titleId: "Rumah Mewah di Puri Kembangan",
-    description: "Renovate the house with modern classic design and adding a new floor.",
-    descriptionId: "renovasi rumah dengan desain modern classic dan menambahkan lantai baru.",
-    category: "residential",
-    location: "Jakarta, Indonesia",
-    duration: "8 months",
-    image: "/src/assets/PuriKembangan.jpeg",
-    status: "completed"
-  },
-  {
-    id: 2,
-    title: "Luxury House in The Zora Cluster",
-    titleId: "Rumah Mewah di Cluster The Zora",
-    description: "Renovate the house with modern minimalist design and adding a new floor.",
-    descriptionId: "renovasi rumah dengan desain modern minimalis dan menambahkan lantai baru.",
-    category: "residential",
-    location: "Tangerang, Indonesia",
-    duration: "6 months",
-    image: "/src/assets/TheZora.jpeg",
-    status: "completed"
-  },
-  {
-    id: 3,
-    title: "Business Place into Motorbike Wash.",
-    titleId: "Tempat Usaha menjadi Cuci Motor",
-    description: "Renovate the place into a modern motorbike wash with efficient workflow.",
-    descriptionId: "Renovasi tempat usaha menjadi cuci motor dengan alur kerja yang efisien.",
-    category: "business",
-    location: "Jakarta, Indonesia",
-    duration: "1.5 months",
-    image: "/src/assets/DK2BikeWash.jpeg",
-    status: "completed"
-  },
-  {
-    id: 4,
-    title: "BUMN",
-    titleId: "BUMN",
-    description: "Upgrading and procurement of government facilities.",
-    descriptionId: "Peningkatan dan pengadaan fasilitas pemerintah.",
-    category: "BUMN",
-    location: "Jakarta, Indonesia",
-    duration: "6 months",
-    image: "/src/assets/BUMN.jpeg",
-    status: "completed"
-  },
-  {
-    id: 5,
-    title: "Constructing road in Bogor",
-    titleId: "Cor jalan di Bogor",
-    description: "Constructing a new road in Bogor with high durability.",
-    descriptionId: "Membangun jalan baru di Bogor dengan daya tahan tinggi.",
-    category: "infrastructure",
-    location: "Sentul, Indonesia",
-    duration: "2 months",
-    image: "/src/assets/CorSentul.jpeg",
-    status: "completed"
-  },
-];
+import { projectsAPI } from '../services/api';
 
-// Utility functions for project statistics
-export const getProjectStats = (projects) => {
-  const completedProjects = projects.filter(project => project.status === 'completed').length;
-  const inProgressProjects = projects.filter(project => project.status === 'in-progress').length;
-  const totalProjects = projects.length;
-  const uniqueLocations = [...new Set(projects.map(project => project.location))].length;
-  const categories = [...new Set(projects.map(project => project.category))].length;
+// Cache for storing fetched projects data
+let projectsCache = null;
+let lastFetchTime = null;
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
+// Function to check if cache is still valid
+const isCacheValid = () => {
+  return projectsCache && lastFetchTime && (Date.now() - lastFetchTime < CACHE_DURATION);
+};
+
+// Function to fetch projects from backend with caching
+export const fetchProjects = async () => {
+  // Return cached data if still valid
+  if (isCacheValid()) {
+    return projectsCache;
+  }
+
+  try {
+    const projects = await projectsAPI.getAll();
+    
+    // Update cache
+    projectsCache = projects;
+    lastFetchTime = Date.now();
+    
+    return projects;
+  } catch (error) {
+    console.error('Failed to fetch projects from backend:', error);
+    
+    // If we have cached data, return it even if expired
+    if (projectsCache) {
+      return projectsCache;
+    }
+    
+    // No fallback - throw the error so the component can handle it
+    throw new Error(`Backend API failed: ${error.message}`);
+  }
+};
+
+// Utility functions for project statistics - updated to work with async data
+export const getProjectStats = async (projects = null) => {
+  // If projects not provided, fetch them
+  const projectsData = projects || await fetchProjects();
+  
+  const completedProjects = projectsData.filter(project => project.status === 'completed').length;
+  const inProgressProjects = projectsData.filter(project => project.status === 'ongoing').length;
+  const totalProjects = projectsData.length;
+  const uniqueLocations = [...new Set(projectsData.map(project => project.location))].length;
+  const categories = [...new Set(projectsData.map(project => project.category))].length;
   
   // Calculate total duration in months
-  const totalDurationMonths = projects.reduce((total, project) => {
+  const totalDurationMonths = projectsData.reduce((total, project) => {
     const durationStr = project.duration.split(' ')[0];
     const months = parseFloat(durationStr); // Use parseFloat to handle decimals like "1.5"
     return total + months;
@@ -85,3 +65,17 @@ export const getProjectStats = (projects) => {
     totalDurationMonths
   };
 };
+
+// Additional utility functions for backend integration
+export const getProjectsByCategory = async (category) => {
+  const projects = await fetchProjects();
+  return projects.filter(project => project.category === category);
+};
+
+export const getRecentProjects = async (limit = 3) => {
+  const projects = await fetchProjects();
+  return projects.slice(0, limit);
+};
+
+// For backward compatibility, export the main fetch function as default
+export default fetchProjects;

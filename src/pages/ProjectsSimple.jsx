@@ -4,56 +4,35 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { projectsAPI } from '../services/api';
 import './Projects.css';
 
-const Projects = () => {
+const ProjectsSimple = () => {
   const [filter, setFilter] = useState('all');
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState({
-    completedProjects: 0,
-    inProgressProjects: 0,
-    totalProjects: 0,
-    uniqueLocations: 0,
-    categories: 0,
-    totalDurationMonths: 0
-  });
+  const [error, setError] = useState(null);
   const { t, language } = useLanguage();
 
   useEffect(() => {
-    const loadProjects = async () => {
+    const fetchProjects = async () => {
       try {
         setLoading(true);
-        const projectsData = await projectsAPI.getAll();
-        setProjects(projectsData);
+        setError(null);
+        console.log('Fetching projects from backend...');
         
-        // Calculate statistics
-        const completedProjects = projectsData.filter(project => project.status === 'completed').length;
-        const inProgressProjects = projectsData.filter(project => project.status === 'ongoing').length;
-        const totalProjects = projectsData.length;
-        const uniqueLocations = [...new Set(projectsData.map(project => project.location))].length;
-        const categories = [...new Set(projectsData.map(project => project.category))].length;
+        const data = await projectsAPI.getAll();
+        console.log('Projects fetched:', data);
+        console.log('Number of projects:', data.length);
         
-        const totalDurationMonths = projectsData.reduce((total, project) => {
-          const durationStr = project.duration.split(' ')[0];
-          const months = parseFloat(durationStr);
-          return total + months;
-        }, 0);
-
-        setStats({
-          completedProjects,
-          inProgressProjects,
-          totalProjects,
-          uniqueLocations,
-          categories,
-          totalDurationMonths
-        });
-      } catch (error) {
-        console.error('Error loading projects:', error);
+        setProjects(data || []);
+      } catch (err) {
+        console.error('Error fetching projects:', err);
+        setError(err.message);
+        setProjects([]); // No fallback data
       } finally {
         setLoading(false);
       }
     };
 
-    loadProjects();
+    fetchProjects();
   }, []);
 
   const filteredProjects = filter === 'all' 
@@ -74,7 +53,36 @@ const Projects = () => {
       <div className="projects">
         <div className="container">
           <div style={{ textAlign: 'center', padding: '4rem 2rem', color: 'white' }}>
-            <h2>Loading projects...</h2>
+            <h2>Loading projects from database...</h2>
+            <p>Connecting to MongoDB Atlas...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="projects">
+        <div className="container">
+          <div style={{ textAlign: 'center', padding: '4rem 2rem', color: '#f39c12' }}>
+            <h2>❌ Backend Connection Failed</h2>
+            <p>Error: {error}</p>
+            <p>Make sure your backend server is running on http://localhost:5000</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              style={{ 
+                padding: '1rem 2rem', 
+                marginTop: '1rem', 
+                background: '#83bc40', 
+                color: 'white', 
+                border: 'none', 
+                borderRadius: '8px',
+                cursor: 'pointer'
+              }}
+            >
+              Retry Connection
+            </button>
           </div>
         </div>
       </div>
@@ -113,18 +121,6 @@ const Projects = () => {
             >
               {language === 'id' ? 'Bisnis' : 'Business'}
             </button>
-            <button 
-              className={`filter-btn ${filter === 'BUMN' ? 'active' : ''}`}
-              onClick={() => setFilter('BUMN')}
-            >
-              BUMN
-            </button>
-            <button 
-              className={`filter-btn ${filter === 'infrastructure' ? 'active' : ''}`}
-              onClick={() => setFilter('infrastructure')}
-            >
-              {language === 'id' ? 'Infrastruktur' : 'Infrastructure'}
-            </button>
           </div>
         </div>
       </section>
@@ -133,7 +129,7 @@ const Projects = () => {
       <section className="projects-grid-section">
         <div className="container">
           {filteredProjects.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '2rem' }}>
+            <div style={{ textAlign: 'center', padding: '2rem', color: 'white' }}>
               <p>{language === 'id' ? 'Tidak ada proyek ditemukan' : 'No projects found'}</p>
             </div>
           ) : (
@@ -146,7 +142,7 @@ const Projects = () => {
                       className="project-status" 
                       style={{ backgroundColor: getStatusColor(project.status) }}
                     >
-                      {t(project.status.replace('-', ''))}
+                      {project.status}
                     </div>
                   </div>
                   <div className="project-content">
@@ -165,6 +161,12 @@ const Projects = () => {
               ))}
             </div>
           )}
+          
+          {/* Debug Info */}
+          <div style={{ textAlign: 'center', padding: '2rem', color: '#83bc40', fontSize: '0.9rem' }}>
+            <p>✅ Showing {filteredProjects.length} of {projects.length} total projects from MongoDB Atlas</p>
+            <p>🔗 Data source: Backend API (http://localhost:5000/api/projects)</p>
+          </div>
         </div>
       </section>
 
@@ -174,20 +176,20 @@ const Projects = () => {
           <h2>{language === 'id' ? 'Statistik Proyek' : 'Project Statistics'}</h2>
           <div className="stats-grid">
             <div className="stat-item">
-              <div className="stat-number">{stats.completedProjects}</div>
+              <div className="stat-number">{projects.length}</div>
+              <div className="stat-label">{language === 'id' ? 'Total Proyek' : 'Total Projects'}</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-number">{projects.filter(p => p.status === 'completed').length}</div>
               <div className="stat-label">{language === 'id' ? 'Proyek Selesai' : 'Projects Completed'}</div>
             </div>
             <div className="stat-item">
-              <div className="stat-number">{stats.uniqueLocations}</div>
-              <div className="stat-label">{language === 'id' ? 'Lokasi Berbeda' : 'Different Locations'}</div>
+              <div className="stat-number">{[...new Set(projects.map(p => p.category))].length}</div>
+              <div className="stat-label">{language === 'id' ? 'Kategori' : 'Categories'}</div>
             </div>
             <div className="stat-item">
-              <div className="stat-number">{stats.totalDurationMonths}</div>
-              <div className="stat-label">{language === 'id' ? 'Total Bulan Pengerjaan' : 'Total Months of Work'}</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">{stats.categories}</div>
-              <div className="stat-label">{language === 'id' ? 'Kategori Proyek' : 'Project Categories'}</div>
+              <div className="stat-number">{[...new Set(projects.map(p => p.location))].length}</div>
+              <div className="stat-label">{language === 'id' ? 'Lokasi' : 'Locations'}</div>
             </div>
           </div>
         </div>
@@ -207,4 +209,4 @@ const Projects = () => {
   );
 };
 
-export default Projects;
+export default ProjectsSimple;
