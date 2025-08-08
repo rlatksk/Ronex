@@ -41,7 +41,6 @@
   left: 0;
   right: 0;
   height: 200px;
-  background: linear-gradient(to top, var(--bg-secondary) 0%, var(--bg-secondary) 15%, rgba(244, 246, 248, 0.9) 35%, rgba(244, 246, 248, 0.6) 65%, rgba(244, 246, 248, 0.3) 85%, transparent 100%);
   pointer-events: none;
 }
 
