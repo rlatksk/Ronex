@@ -92,7 +92,7 @@ export const LanguageProvider = ({ children }) => {
       
       // Home Page
       heroTitle: 'Membangun Infrastruktur Masa Depan Hari Ini',
-      heroSubtitle: 'Layanan konstruksi profesional dengan pengalaman lebih dari 15 tahun. Dari bangunan residensial hingga kompleks komersial, kami memberikan solusi konstruksi berkualitas.',
+      heroSubtitle: 'Layanan konstruksi profesional. Dari bangunan residensial hingga kompleks komersial, kami memberikan solusi konstruksi berkualitas.',
       ourProjects: 'Proyek Kami',
       learnMore: 'Pelajari Lebih Lanjut',
       ourServices: 'Layanan Kami',
