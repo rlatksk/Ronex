@@ -26,7 +26,6 @@ export const fetchProjects = async () => {
     
     return projects;
   } catch (error) {
-    console.error('Failed to fetch projects from backend:', error);
     
     // If we have cached data, return it even if expired
     if (projectsCache) {

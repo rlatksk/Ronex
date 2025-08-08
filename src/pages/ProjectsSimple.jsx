@@ -16,17 +16,12 @@ const ProjectsSimple = () => {
       try {
         setLoading(true);
         setError(null);
-        console.log('Fetching projects from backend...');
         
         const data = await projectsAPI.getAll();
-        console.log('Projects fetched:', data);
-        console.log('Number of projects:', data.length);
-        
         setProjects(data || []);
       } catch (err) {
-        console.error('Error fetching projects:', err);
         setError(err.message);
-        setProjects([]); // No fallback data
+        setProjects([]);
       } finally {
         setLoading(false);
       }
@@ -53,8 +48,7 @@ const ProjectsSimple = () => {
       <div className="projects">
         <div className="container">
           <div style={{ textAlign: 'center', padding: '4rem 2rem', color: 'white' }}>
-            <h2>Loading projects from database...</h2>
-            <p>Connecting to MongoDB Atlas...</p>
+            <h2>Loading projects...</h2>
           </div>
         </div>
       </div>
@@ -66,9 +60,8 @@ const ProjectsSimple = () => {
       <div className="projects">
         <div className="container">
           <div style={{ textAlign: 'center', padding: '4rem 2rem', color: '#f39c12' }}>
-            <h2>❌ Backend Connection Failed</h2>
-            <p>Error: {error}</p>
-            <p>Make sure your backend server is running on http://localhost:5000</p>
+            <h2>Service Temporarily Unavailable</h2>
+            <p>Please try again later</p>
             <button 
               onClick={() => window.location.reload()} 
               style={{ 
@@ -81,7 +74,7 @@ const ProjectsSimple = () => {
                 cursor: 'pointer'
               }}
             >
-              Retry Connection
+              Retry
             </button>
           </div>
         </div>
@@ -161,12 +154,6 @@ const ProjectsSimple = () => {
               ))}
             </div>
           )}
-          
-          {/* Debug Info */}
-          <div style={{ textAlign: 'center', padding: '2rem', color: '#83bc40', fontSize: '0.9rem' }}>
-            <p>✅ Showing {filteredProjects.length} of {projects.length} total projects from MongoDB Atlas</p>
-            <p>🔗 Data source: Backend API (http://localhost:5000/api/projects)</p>
-          </div>
         </div>
       </section>
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { projectsAPI, setApiKey as setAxiosApiKey, clearApiKey } from '../services/api';
+import { getImageSrc } from '../utils/imageUtils';
 import './Admin.css';
 
 const Admin = () => {
@@ -25,25 +26,16 @@ const Admin = () => {
     status: 'completed'
   });
 
-  console.log('🚀 Admin component initialized');
-  console.log('📋 Current localStorage admin-api-key:', localStorage.getItem('admin-api-key'));
-  console.log('🔑 Current apiKey state:', apiKey);
-  console.log('❓ Show API key prompt:', showApiKeyPrompt);
-
   // Initialize component once
   useEffect(() => {
     if (!isInitialized) {
-      console.log('🔄 Initializing admin component...');
       const storedKey = localStorage.getItem('admin-api-key');
-      console.log('🔍 Found stored API key:', storedKey);
       
       if (storedKey && storedKey.trim() !== '') {
-        console.log('✅ Using stored API key');
         setApiKey(storedKey);
         setAxiosApiKey(storedKey);
         setShowApiKeyPrompt(false);
       } else {
-        console.log('❌ No stored API key, showing prompt');
         setShowApiKeyPrompt(true);
       }
       
@@ -54,10 +46,8 @@ const Admin = () => {
   // Initialize API key in axios when component mounts or apiKey changes
   useEffect(() => {
     if (apiKey) {
-      console.log('🔧 Initializing API key in axios:', apiKey);
       setAxiosApiKey(apiKey);
     } else {
-      console.log('🗑️ No API key, clearing axios defaults');
       clearApiKey();
     }
   }, [apiKey]);
@@ -101,10 +91,8 @@ const Admin = () => {
 
     try {
       setUploadingImage(true);
-      console.log('📸 Converting image to base64...');
       
       const base64 = await convertToBase64(file);
-      console.log('✅ Image converted to base64');
       
       setFormData(prev => ({
         ...prev,
@@ -113,7 +101,6 @@ const Admin = () => {
       setImagePreview(base64);
       
     } catch (error) {
-      console.error('❌ Error converting image:', error);
       alert('Error processing image. Please try again.');
     } finally {
       setUploadingImage(false);
@@ -149,23 +136,18 @@ const Admin = () => {
   };
 
   const handleApiKeySubmit = async () => {
-    console.log('🔐 Submitting API key:', apiKey);
     
     if (apiKey.trim()) {
       const trimmedKey = apiKey.trim();
       setValidatingApiKey(true);
       
       try {
-        console.log('🔍 Validating API key with backend...');
         await projectsAPI.validateApiKey(trimmedKey);
         
-        console.log('✅ API key is valid!');
         localStorage.setItem('admin-api-key', trimmedKey);
         setShowApiKeyPrompt(false);
-        console.log('✅ API key submission complete');
         
       } catch (error) {
-        console.error('❌ API key validation failed:', error);
         
         if (error.response?.status === 401) {
           alert('Invalid API key. Please check your key and try again.');
@@ -183,13 +165,11 @@ const Admin = () => {
   };
 
   const resetApiKey = () => {
-    console.log('🗑️ Resetting API key...');
     localStorage.removeItem('admin-api-key');
     clearApiKey();
     setApiKey('');
     setShowApiKeyPrompt(true);
     setIsInitialized(false);
-    console.log('✅ API key reset complete');
   };
 
   const loadProjects = async () => {
@@ -198,7 +178,6 @@ const Admin = () => {
       const data = await projectsAPI.getAll();
       setProjects(data);
     } catch (error) {
-      console.error('Error loading projects:', error);
       alert('Error loading projects: ' + error.message);
     } finally {
       setLoading(false);
@@ -240,7 +219,6 @@ const Admin = () => {
       setImagePreview('');
       loadProjects();
     } catch (error) {
-      console.error('Error saving project:', error);
       alert('Error saving project: ' + error.message);
     }
   };
@@ -269,7 +247,6 @@ const Admin = () => {
         alert('Project deleted successfully!');
         loadProjects();
       } catch (error) {
-        console.error('Error deleting project:', error);
         alert('Error deleting project: ' + error.message);
       }
     }

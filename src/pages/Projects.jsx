@@ -47,7 +47,7 @@ const Projects = () => {
           totalDurationMonths
         });
       } catch (error) {
-        console.error('Error loading projects:', error);
+        // Error loading projects - handle silently in production
       } finally {
         setLoading(false);
       }
