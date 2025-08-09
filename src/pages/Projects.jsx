@@ -1,13 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { projectsAPI } from '../services/api';
+import LazyImage from '../components/LazyImage';
+import LoadingSpinner from '../components/LoadingSpinner';
+import { throttle } from '../utils/performanceUtils';
 import './Projects.css';
 
 const Projects = () => {
   const [filter, setFilter] = useState('all');
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [visibleProjects, setVisibleProjects] = useState([]);
+  const [visibleRange, setVisibleRange] = useState({ start: 0, end: 8 });
+  const containerRef = useRef();
   const [stats, setStats] = useState({
     completedProjects: 0,
     inProgressProjects: 0,
@@ -22,6 +29,8 @@ const Projects = () => {
     const loadProjects = async () => {
       try {
         setLoading(true);
+        setError(null);
+        
         const projectsData = await projectsAPI.getAll();
         setProjects(projectsData);
         
@@ -47,7 +56,8 @@ const Projects = () => {
           totalDurationMonths
         });
       } catch (error) {
-        // Error loading projects - handle silently in production
+        setError(error.message || 'Failed to load projects');
+        setProjects([]); // Reset projects on error
       } finally {
         setLoading(false);
       }
@@ -56,9 +66,50 @@ const Projects = () => {
     loadProjects();
   }, []);
 
+  // Filtered projects
   const filteredProjects = filter === 'all' 
     ? projects 
     : projects.filter(project => project.category === filter);
+
+  // Virtual scrolling logic
+  const updateVisibleProjects = useCallback(() => {
+    if (!containerRef.current) return;
+    
+    const container = containerRef.current;
+    const { scrollTop, clientHeight } = container;
+    const itemHeight = 400; // Approximate height of each project card
+    const itemsPerRow = Math.floor(container.clientWidth / 300) || 4; // Dynamic based on screen width
+    
+    const visibleRows = Math.ceil(clientHeight / itemHeight);
+    const scrolledRows = Math.floor(scrollTop / itemHeight);
+    
+    const start = Math.max(0, (scrolledRows - 1) * itemsPerRow);
+    const end = Math.min(filteredProjects.length, (scrolledRows + visibleRows + 2) * itemsPerRow);
+    
+    setVisibleRange({ start, end });
+  }, [filteredProjects.length]);
+
+  // Update visible projects when range or filter changes
+  useEffect(() => {
+    if (filteredProjects.length > 0) {
+      setVisibleProjects(filteredProjects.slice(visibleRange.start, visibleRange.end));
+    }
+  }, [filteredProjects, visibleRange]);
+
+  // Handle scroll for virtual scrolling with throttling
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleScroll = throttle(() => {
+      updateVisibleProjects();
+    }, 16); // ~60fps
+
+    container.addEventListener('scroll', handleScroll, { passive: true });
+    updateVisibleProjects(); // Initial call
+
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [updateVisibleProjects]);
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -72,11 +123,63 @@ const Projects = () => {
   if (loading) {
     return (
       <div className="projects">
-        <div className="container">
-          <div style={{ textAlign: 'center', padding: '4rem 2rem', color: 'white' }}>
-            <h2>Loading projects...</h2>
+        {/* Hero Section - Show even while loading */}
+        <section className="projects-hero">
+          <div className="container">
+            <h1>{t('projectsTitle')}</h1>
+            <p>{t('projectsSubtitle')}</p>
           </div>
-        </div>
+        </section>
+
+        {/* Loading Spinner */}
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="projects">
+        {/* Hero Section */}
+        <section className="projects-hero">
+          <div className="container">
+            <h1>{t('projectsTitle')}</h1>
+            <p>{t('projectsSubtitle')}</p>
+          </div>
+        </section>
+
+        {/* Error Message */}
+        <section className="projects-grid-section">
+          <div className="container">
+            <div style={{ 
+              textAlign: 'center', 
+              padding: '4rem 2rem',
+              color: '#f39c12',
+              background: 'rgba(243, 156, 18, 0.1)',
+              borderRadius: '8px',
+              margin: '2rem 0'
+            }}>
+              <h3>⚠️ Unable to Load Projects</h3>
+              <p>{error}</p>
+              <button 
+                onClick={() => window.location.reload()} 
+                style={{
+                  padding: '1rem 2rem',
+                  background: '#83bc40',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontSize: '1rem',
+                  marginTop: '1rem'
+                }}
+              >
+                {language === 'id' ? 'Coba Lagi' : 'Try Again'}
+              </button>
+            </div>
+          </div>
+        </section>
       </div>
     );
   }
@@ -131,17 +234,57 @@ const Projects = () => {
 
       {/* Projects Grid */}
       <section className="projects-grid-section">
-        <div className="container">
+        <div 
+          className="container" 
+          ref={containerRef}
+          style={{ 
+            height: filteredProjects.length > 8 ? '80vh' : 'auto', 
+            overflowY: filteredProjects.length > 8 ? 'auto' : 'visible' 
+          }}
+        >
           {filteredProjects.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '2rem' }}>
-              <p>{language === 'id' ? 'Tidak ada proyek ditemukan' : 'No projects found'}</p>
+            <div style={{ 
+              textAlign: 'center', 
+              padding: '4rem 2rem',
+              color: '#b3b3b3',
+              background: 'rgba(45, 45, 45, 0.5)',
+              borderRadius: '8px',
+              margin: '2rem 0'
+            }}>
+              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📋</div>
+              <h3>{language === 'id' ? 'Tidak ada proyek ditemukan' : 'No projects found'}</h3>
+              <p style={{ marginBottom: '1.5rem' }}>
+                {language === 'id' 
+                  ? 'Coba ubah filter untuk melihat proyek lainnya' 
+                  : 'Try changing the filter to see other projects'
+                }
+              </p>
+              <button 
+                onClick={() => setFilter('all')}
+                style={{
+                  padding: '0.75rem 1.5rem',
+                  background: '#83bc40',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontSize: '0.9rem'
+                }}
+              >
+                {language === 'id' ? 'Tampilkan Semua' : 'Show All Projects'}
+              </button>
             </div>
           ) : (
             <div className="projects-grid">
-              {filteredProjects.map(project => (
+              {/* Virtual scrolling: only render visible projects */}
+              {(filteredProjects.length <= 8 ? filteredProjects : visibleProjects).map(project => (
                 <div key={project._id || project.id} className="project-card">
                   <div className="project-image">
-                    <img src={project.image} alt={project.title} className="project-img" />
+                    <LazyImage 
+                      src={project.image} 
+                      alt={project.title} 
+                      className="project-img"
+                    />
                     <div 
                       className="project-status" 
                       style={{ backgroundColor: getStatusColor(project.status) }}

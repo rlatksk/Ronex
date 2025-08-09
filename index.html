@@ -4,10 +4,76 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/RonexLogo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ronex</title>
+    
+    <!-- SEO and Performance Meta Tags -->
+    <meta name="description" content="Ronex - Professional construction and infrastructure services">
+    <meta name="keywords" content="construction, infrastructure, residential, business, BUMN">
+    <meta name="author" content="Ronex">
+    
+    <!-- Preconnect to external domains for faster loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://ronex-backend.vercel.app">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/RonexLogo.svg" as="image" type="image/svg+xml">
+    
+    <!-- Critical CSS - inline for faster loading -->
+    <style>
+      /* Critical above-the-fold styles */
+      :root {
+        --bg-primary: #1a1a1a;
+        --bg-secondary: #2d2d2d;
+        --text-primary: #ffffff;
+        --text-secondary: #b3b3b3;
+        --accent-primary: #83bc40;
+        --accent-secondary: #262561;
+      }
+      
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.6;
+      }
+      
+      #root {
+        min-height: 100vh;
+      }
+      
+      /* Loading state */
+      .app-loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: var(--bg-primary);
+      }
+    </style>
+    
+    <title>Ronex - Professional Construction Services</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Fallback loading state -->
+      <div class="app-loading">
+        <div style="text-align: center; color: var(--text-primary);">
+          <div style="width: 50px; height: 50px; border: 4px solid rgba(131, 188, 64, 0.1); border-left: 4px solid #83bc40; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem;"></div>
+          <p>Loading Ronex...</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Load main script with defer for non-blocking -->
     <script type="module" src="/src/main.jsx"></script>
+    
+    <!-- Add animation keyframes -->
+    <style>
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
   </body>
 </html>

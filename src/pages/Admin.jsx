@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { projectsAPI, setApiKey as setAxiosApiKey, clearApiKey } from '../services/api';
 import { getImageSrc } from '../utils/imageUtils';
+import LazyImage from '../components/LazyImage';
 import './Admin.css';
 
 const Admin = () => {
@@ -58,18 +59,64 @@ const Admin = () => {
     }
   }, [apiKey, showApiKeyPrompt]);
 
-  // Convert file to base64
-  const convertToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file);
-      fileReader.onload = () => {
-        resolve(fileReader.result);
+  // Image compression function
+  const compressImage = (file, maxWidth = 800, quality = 0.8) => {
+    return new Promise((resolve) => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      
+      img.onload = () => {
+        // Calculate new dimensions while maintaining aspect ratio
+        let { width, height } = img;
+        
+        if (width > height) {
+          if (width > maxWidth) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxWidth) {
+            width = (width * maxWidth) / height;
+            height = maxWidth;
+          }
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        
+        // Draw and compress
+        ctx.drawImage(img, 0, 0, width, height);
+        canvas.toBlob(resolve, 'image/jpeg', quality);
       };
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
+      
+      img.src = URL.createObjectURL(file);
     });
+  };
+
+  // Convert file to base64 with compression
+  const convertToBase64 = async (file) => {
+    try {
+      setUploadingImage(true);
+      
+      // Compress image first
+      const compressedFile = await compressImage(file);
+      
+      return new Promise((resolve, reject) => {
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(compressedFile);
+        fileReader.onload = () => {
+          resolve(fileReader.result);
+        };
+        fileReader.onerror = (error) => {
+          reject(error);
+        };
+      });
+    } catch (error) {
+      throw error;
+    } finally {
+      setUploadingImage(false);
+    }
   };
 
   // Handle image file upload
@@ -83,10 +130,16 @@ const Admin = () => {
       return;
     }
 
+    // Add file size limit (10MB before compression)
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSize) {
+      alert('Image size must be less than 10MB. Please choose a smaller image.');
+      return;
+    }
+
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      alert('Image size should be less than 5MB');
-      return;
+      alert('Large image detected. Compressing to optimize performance...');
     }
 
     try {
@@ -566,10 +619,16 @@ const Admin = () => {
                   {projects.map(project => (
                     <tr key={project._id}>
                       <td>
-                        <img 
+                        <LazyImage 
                           src={project.image} 
                           alt={project.title}
                           className="project-thumbnail"
+                          style={{ 
+                            width: '80px', 
+                            height: '60px', 
+                            borderRadius: '4px',
+                            objectFit: 'cover'
+                          }}
                         />
                       </td>
                       <td>
